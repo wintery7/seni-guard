@@ -4,7 +4,7 @@ description: A new Flutter project.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter_lints: ^2.0.0
@@ -13,7 +13,7 @@ dependencies:
   kakao_flutter_sdk_user: ^1.9.5  # 카카오 로그인 API 패키지
   logger: ^1.0.0
   cupertino_icons: ^1.0.8
-  http: ^0.13.5  # 최신 버전으로 지정하세요
+  http: ^1.1.0  # 최신 버전으로 지정하세요
   # STT, TTS 지정
   speech_to_text: ^6.6.2
   flutter_tts: ^3.5.0
