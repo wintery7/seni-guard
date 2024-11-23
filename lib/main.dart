@@ -50,81 +50,51 @@ class _StartAppState extends State<StartApp> {
       );
     });
   }
-
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+
     return Column(
       children: [
         Container(
-          width: 414,
-          height: 896,
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(color: Color(0xFF53B175)),
-          child: Stack(
+          width: screenWidth,
+          height: screenHeight,
+          padding: EdgeInsets.symmetric(
+            horizontal: screenWidth * 0.15, // 화면 너비의 15%
+            vertical: screenHeight * 0.45, // 화면 높이의 45%
+          ),
+          decoration: const BoxDecoration(color: Color(0xFF53B175)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Positioned(
-                left: 80,
-                top: 368,
-                child: Container(
-                  width: 254,
-                  height: 57,
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        left: 51,
-                        top: 12,
-                        child: SizedBox(
-                          width: 203,
-                          height: 27,
-                          child: Text(
-                            'SeniGuard',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 40,
-                              fontFamily: 'Freesentation',
-                              fontWeight: FontWeight.w900,
-                              height: 0.01,
-                              letterSpacing: 1,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: 0,
-                        top: 0,
-                        child: Container(
-                          width: 64,
-                          height: 55,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                  "https://via.placeholder.com/64x55"),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: 54,
-                        top: 40,
-                        child: SizedBox(
-                          width: 198,
-                          height: 17,
-                          child: Text(
-                            'The First Step to Wellness',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontFamily: 'Freesentation',
-                              fontWeight: FontWeight.w800,
-                              height: 0.10,
-                              letterSpacing: 2.40,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+              // '시니가드' 텍스트
+              SizedBox(
+                width: screenWidth * 0.4, // 화면 너비의 40%
+                child: Text(
+                  '시니가드',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: screenWidth * 0.1, // 화면 너비의 10%
+                    fontFamily: 'Freesentation',
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              // '당신의 건강 지킴이' 텍스트
+              SizedBox(
+                width: screenWidth * 0.25, // 화면 너비의 25%
+                child: Text(
+                  '당신의 건강 지킴이',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: screenWidth * 0.04, // 화면 너비의 4%
+                    fontFamily: 'Freesentation',
+                    fontWeight: FontWeight.w900,
                   ),
                 ),
               ),
@@ -134,4 +104,4 @@ class _StartAppState extends State<StartApp> {
       ],
     );
   }
-} 
+}

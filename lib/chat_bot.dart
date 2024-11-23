@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:seniguard/seni_modal.dart';
 
 void main() {
@@ -13,75 +13,78 @@ class FigmaToCode_3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
+      theme: ThemeData.light().copyWith(
+        scaffoldBackgroundColor: Colors.white,
       ),
-      home: Scaffold(
-        body: ListView(children: [
-          ChatBotPage(),
-        ]),
-      ),
+      home: const ChatBotPage(),
     );
   }
 }
 
 class ChatBotPage extends StatefulWidget {
+  const ChatBotPage({super.key});
+
   @override
   _ChatBotPageState createState() => _ChatBotPageState();
 }
 
 class _ChatBotPageState extends State<ChatBotPage> {
-  // TextField 컨트롤러 선언
   final TextEditingController _textController = TextEditingController();
-  String _response = ''; // 서버 응답 저장 변수
+  final ScrollController _scrollController = ScrollController();
+  final List<Map<String, String>> _messages = []; // 채팅 메시지 리스트
 
   // 챗봇에 텍스트 요청 보내는 함수
   Future<void> _sendTextToChatBot(String text) async {
-    print('챗봇에 요청 보내려 왔음');
-    final url =
-        Uri.parse('https://chatbot-iya6loaa4q-uc.a.run.app'); // 챗봇 서버 URL
+    setState(() {
+      // 사용자 메시지 추가
+      _messages.add({'sender': 'user', 'message': text});
+    });
 
+    final url =
+        Uri.parse('https://chatbot-iya6loaa4q-du.a.run.app'); // 챗봇 서버 URL
     try {
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
-        body: json.encode({'message': text}), // 서버로 보낼 데이터
+        body: json.encode({'message': text}),
       );
 
       if (response.statusCode == 200) {
-        // 서버 응답이 성공적일 경우
         final data = json.decode(response.body);
-        print(_response); // Gemini Response 확인용
         setState(() {
-          _response = data['response'] ?? '응답을 받을 수 없습니다.';
+          _messages.add({
+            'sender': 'bot',
+            'message': data['response'] ?? '응답을 받을 수 없습니다.'
+          });
         });
       } else {
         setState(() {
-          _response = '서버에 오류가 발생했습니다.';
+          _messages.add({'sender': 'bot', 'message': '메시지를 다시 보내주세요!'});
         });
       }
     } catch (e) {
       setState(() {
-        _response = '서버에 연결할 수 없습니다.';
+        _messages.add({'sender': 'bot', 'message': '서버에 연결할 수 없습니다.'});
       });
     }
+
+    // 스크롤을 최신 메시지로 이동
+    Future.delayed(Duration(milliseconds: 300), () {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    });
   }
 
-  // 모달 페이지 호출 및 반환된 텍스트 업데이트
   Future<void> _openSpeechModal() async {
     final result = await showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: ModalPage(), // 음성 인식 모달 페이지
-        );
-      },
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: ModalPage(),
+      ),
     );
 
-    // 모달에서 텍스트 반환 시 입력 필드 업데이트
     if (result != null && result is String) {
       setState(() {
         _textController.text = result;
@@ -91,145 +94,149 @@ class _ChatBotPageState extends State<ChatBotPage> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    double fontSizeLarge = width * 0.05;
-    double fontSizeSmall = width * 0.03;
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back), // 뒤로가기 아이콘
+          onPressed: () {
+            Navigator.pop(context); // 뒤로가기 동작
+          },
+        ),
+        title: const Text('시니'),
+        centerTitle: true, // 텍스트 중앙 정렬
+        backgroundColor: const Color(0xFF53B175),
+      ),
+      body: Column(
+        children: [
+          // 채팅 메시지 표시 영역
+          Expanded(
+            child: ListView.builder(
+              controller: _scrollController,
+              itemCount: _messages.length,
+              itemBuilder: (context, index) {
+                final message = _messages[index];
+                final isUser = message['sender'] == 'user';
 
-    return Column(
-      children: [
-        Container(
-          width: width,
-          height: height,
-          decoration: BoxDecoration(color: Colors.white),
-          child: Stack(
-            children: [
-              // 하단 입력창 위치 설정
-              Positioned(
-                left: 0,
-                top: height - 145,
-                child: Container(
-                  width: width,
-                  height: 145,
-                  padding: EdgeInsets.symmetric(
-                      horizontal: width * 0.05, vertical: height * 0.02),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.03),
-                  ),
-                  child: Row(
-                    children: [
-                      // 음성 인식 모달 버튼
-                      GestureDetector(
-                        onTap: _openSpeechModal,
-                        child: Container(
-                          width: 95,
-                          height: 95,
-                          decoration: ShapeDecoration(
-                            image: DecorationImage(
-                              image: AssetImage('images/kakao_login.png'),
-                              fit: BoxFit.fill,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                  width: 2, color: Color(0xFF53B175)),
-                              borderRadius: BorderRadius.circular(11),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      // 텍스트 입력 필드
-                      Expanded(
-                        child: Container(
-                          height: 95,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: width * 0.05,
-                              vertical: height * 0.01),
-                          decoration: ShapeDecoration(
-                            color: Color(0xFF1C293C),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: TextField(
-                                  controller: _textController,
-                                  style: TextStyle(
-                                    color: Color(0xFFEFF6FF),
-                                    fontSize: fontSizeLarge,
-                                  ),
-                                  cursorColor: Colors.white,
-                                  decoration: InputDecoration(
-                                    hintText: '하고 싶은 것을 입력해 주세요',
-                                    hintStyle: TextStyle(
-                                      color: Color(0xFF45566E),
-                                      fontSize: fontSizeSmall,
-                                    ),
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-                              // 입력 버튼
-                              GestureDetector(
-                                onTap: () {
-                                  // 입력 버튼 클릭 시 서버 요청 보내기
-                                  if (_textController.text.isNotEmpty) {
-                                    print('입력 버튼 눌렸음');
-                                    _sendTextToChatBot(_textController.text);
-                                  }
-                                },
-                                behavior: HitTestBehavior
-                                    .translucent, // 터치가 다른 위젯을 통과하게 설정
-                                child: Container(
-                                  width: 90,
-                                  height: 55,
-                                  padding: EdgeInsets.all(6),
-                                  child: Center(
-                                    child: Text(
-                                      '입력',
-                                      style: TextStyle(
-                                        color: Color(0xFFEFF6FF),
-                                        fontSize: fontSizeLarge,
-                                        fontWeight: FontWeight.w800,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              // 서버 응답 표시
-              Positioned(
-                bottom: height * 0.2,
-                left: width * 0.05,
-                child: Container(
-                  width: width * 0.9,
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF1C293C),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    _response,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: fontSizeLarge,
+                return Container(
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  alignment:
+                      isUser ? Alignment.centerRight : Alignment.centerLeft,
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: isUser ? Colors.blue : Colors.green,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      message['message']!,
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ),
+                );
+              },
+            ),
+          ),
+          _buildInputArea(width, height),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInputArea(double width, double height) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: width * 0.05, vertical: 10),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: _openSpeechModal,
+            child: Container(
+              width: 50,
+              height: 50,
+              decoration: ShapeDecoration(
+                image: const DecorationImage(
+                  image: AssetImage('images/speak.png'),
+                  fit: BoxFit.fill,
+                ),
+                shape: RoundedRectangleBorder(
+                  side: const BorderSide(width: 2, color: Color(0xFF53B175)),
+                  borderRadius: BorderRadius.circular(11),
                 ),
               ),
-            ],
+            ),
           ),
-        ),
-      ],
+          const SizedBox(width: 10),
+          Expanded(
+            child: Container(
+              height: 50, // 고정 높이 설정
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              decoration: ShapeDecoration(
+                color: const Color(0xFF1C293C), // 배경색
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100), // 라운드 처리
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // 텍스트 입력 영역
+                  Expanded(
+                    child: TextField(
+                      controller: _textController,
+                      style: const TextStyle(
+                        color: Colors.white, // 입력 텍스트 색상
+                        fontSize: 18,
+                        fontFamily: 'Freesentation', // 원하는 폰트 설정
+                        fontWeight: FontWeight.w500,
+                      ),
+                      decoration: const InputDecoration(
+                        hintText: '하고 싶은 것을 입력해 주세요',
+                        hintStyle: TextStyle(
+                          color: Color(0xFF45566E), // 힌트 텍스트 색상
+                          fontSize: 18,
+                        ),
+                        border: InputBorder.none, // 기본 테두리 제거
+                      ),
+                    ),
+                  ),
+                  // 입력 버튼
+                  GestureDetector(
+                    onTap: () {
+                      if (_textController.text.isNotEmpty) {
+                        _sendTextToChatBot(_textController.text);
+                        _textController.clear();
+                      }
+                    },
+                    child: Container(
+                      width: 90,
+                      height: 55,
+                      alignment: Alignment.center, // 텍스트 중앙 정렬
+                      decoration: ShapeDecoration(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50), // 라운드 처리
+                        ),
+                      ),
+                      child: const Text(
+                        '입력',
+                        style: TextStyle(
+                          color: Color(0xFFEFF6FF), // 버튼 텍스트 색상
+                          fontSize: 18,
+                          fontFamily: 'Freesentation', // 원하는 폰트 설정
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
