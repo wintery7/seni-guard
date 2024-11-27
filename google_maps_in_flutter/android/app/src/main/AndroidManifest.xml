@@ -1,40 +1,8 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" packpage="com.example.speech_to_text_flutter">
-
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
-
-    <queries>
-        <intent>
-            <action android:name="android.intent.action.TTS_SERVICE" />
-        </intent>
-    </queries>
-    
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="seniguard"
+        android:label="google_maps_in_flutter"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-
-        <!-- TODO: Add your Google Maps API key here -->
-        <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBFt4Tw69PWfY4y78UXaesUT4B3ZSEMtXs"/>
-
-        <activity
-                android:name="com.kakao.sdk.flutter.AuthCodeCustomTabsActivity"
-                android:exported="true">
-            <intent-filter android:label="flutter_web_auth">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data 
-                    android:scheme="kakao6adea7b512e4a581e9d7ab7d6c26a2a6" 
-                    android:host="oauth"/>
-            </intent-filter>
-        </activity>
-
         <activity
             android:name=".MainActivity"
             android:exported="true"
