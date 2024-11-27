@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:seniguard/chat_bot.dart';
-// import 'package:seniguard/chat.dart';
 import 'dart:async';
+
+import 'package:seniguard/check_list.dart';
 
 void main() {
   runApp(const FigmaToCode_2());
@@ -837,20 +838,21 @@ class SelectPage extends StatelessWidget {
                         ),
                       ),
                       Positioned(
-                        left: screenWidth * 0.101,
-                        top: screenHeight * 0.233,
+                        left: screenWidth * 0.088,
+                        top: screenHeight * 0.235,
                         child: SizedBox(
-                          width: screenWidth * 0.225,
+                          width: screenWidth * 0.261,
                           height: screenHeight * 0.048,
                           child: Text(
-                            '산책 하기',
+                            '산책하기',
                             style: TextStyle(
-                              color: Color(0xFFFDF9F3),
-                              fontSize: baseFontSize * 1.0, // 폰트 크기 조정
+                              color: const Color(0xFFFDF9F3),
+                              fontSize: baseFontSize * 1.0,
                               fontFamily: 'Freesentation',
                               fontWeight: FontWeight.w600,
-                              height: 0.01,
+                              height: 1.2, // 줄 간격 조정
                             ),
+                            textAlign: TextAlign.center, // 텍스트 중앙 정렬
                           ),
                         ),
                       ),
@@ -924,20 +926,21 @@ class SelectPage extends StatelessWidget {
                           ),
                         ),
                         Positioned(
-                          left: screenWidth * 0.099,
+                          left: screenWidth * 0.088,
                           top: screenHeight * 0.235,
                           child: SizedBox(
-                            width: screenWidth * 0.227,
+                            width: screenWidth * 0.261,
                             height: screenHeight * 0.048,
                             child: Text(
-                              '시니 대화',
+                              '시니와 대화',
                               style: TextStyle(
-                                color: Color(0xFFFDF9F3),
-                                fontSize: baseFontSize * 1.0, // 폰트 크기 조정
+                                color: const Color(0xFFFDF9F3),
+                                fontSize: baseFontSize * 1.0,
                                 fontFamily: 'Freesentation',
                                 fontWeight: FontWeight.w600,
-                                height: 0.01,
+                                height: 1.2, // 줄 간격 조정
                               ),
+                              textAlign: TextAlign.center, // 텍스트 중앙 정렬
                             ),
                           ),
                         ),
@@ -948,80 +951,95 @@ class SelectPage extends StatelessWidget {
               ),
               // 챗봇 이동 버튼
 
-              // 체크리스트
+              // 체크리스트 버튼
               Positioned(
                 left: screenWidth * 0.54,
                 top: screenHeight * 0.138,
-                child: Container(
-                  width: screenWidth * 0.423,
-                  height: screenHeight * 0.316,
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        left: 0,
-                        top: 0,
-                        child: Container(
-                          width: screenWidth * 0.423,
-                          height: screenHeight * 0.316,
-                          decoration: ShapeDecoration(
-                            color: Color(0xFFF9CF88),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                child: GestureDetector(
+                  onTap: () {
+                    // 네비게이션 동작
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Page_CheckList()),
+                    );
+                  },
+                  child: Container(
+                    width: screenWidth * 0.423,
+                    height: screenHeight * 0.316,
+                    child: Stack(
+                      children: [
+                        // 첫 번째 배경
+                        Positioned(
+                          left: 0,
+                          top: 0,
+                          child: Container(
+                            width: screenWidth * 0.423,
+                            height: screenHeight * 0.316,
+                            decoration: ShapeDecoration(
+                              color: const Color(0xFFF9CF88),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Positioned(
-                        left: screenWidth * 0.015, // 화면에 맞게 위치 설정
-                        top: screenHeight * 0.01, // 상단 여백을 계산하여 위치 설정
-                        right: screenWidth * 0.015,
-                        bottom: screenHeight * 0.1,
-                        child: Container(
-                          width: screenWidth,
-                          height: screenHeight,
-                          decoration: ShapeDecoration(
-                            color: Color.fromARGB(255, 232, 203, 173),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                        // 두 번째 배경
+                        Positioned(
+                          left: screenWidth * 0.015,
+                          top: screenHeight * 0.01,
+                          right: screenWidth * 0.015,
+                          bottom: screenHeight * 0.1,
+                          child: Container(
+                            width: screenWidth,
+                            height: screenHeight,
+                            decoration: ShapeDecoration(
+                              color: const Color.fromARGB(255, 232, 203, 173),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Positioned(
-                        left: screenWidth * 0.005, // 화면에 맞게 위치 설정
-                        top: screenHeight * 0.01, // 상단 여백을 계산하여 위치 설정
-                        right: screenWidth * 0.005,
-                        bottom: screenHeight * 0.1,
-                        child: Container(
-                          width: screenWidth, // 화면 너비에 맞게 설정
-                          height: screenHeight * 0.2, // 화면 높이에 맞게 설정
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage("images/checklist_button.png"),
-                              fit: BoxFit.fitHeight, // 이미지를 화면에 맞게 커버
+                        // 버튼 이미지
+                        Positioned(
+                          left: screenWidth * 0.005,
+                          top: screenHeight * 0.01,
+                          right: screenWidth * 0.005,
+                          bottom: screenHeight * 0.1,
+                          child: Container(
+                            width: screenWidth,
+                            height: screenHeight * 0.2,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image:
+                                    AssetImage("images/checklist_button.png"),
+                                fit: BoxFit.fitHeight, // 이미지를 높이에 맞게 조정
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Positioned(
-                        left: screenWidth * 0.088,
-                        top: screenHeight * 0.235,
-                        child: SizedBox(
-                          width: screenWidth * 0.261,
-                          height: screenHeight * 0.048,
-                          child: Text(
-                            '체크리스트',
-                            style: TextStyle(
-                              color: Color(0xFFFDF9F3),
-                              fontSize: baseFontSize * 1.0, // 폰트 크기 조정
-                              fontFamily: 'Freesentation',
-                              fontWeight: FontWeight.w600,
-                              height: 0.01,
+                        // 버튼 텍스트
+                        Positioned(
+                          left: screenWidth * 0.088,
+                          top: screenHeight * 0.235,
+                          child: SizedBox(
+                            width: screenWidth * 0.261,
+                            height: screenHeight * 0.048,
+                            child: Text(
+                              '오늘의 할일',
+                              style: TextStyle(
+                                color: const Color(0xFFFDF9F3),
+                                fontSize: baseFontSize * 1.0,
+                                fontFamily: 'Freesentation',
+                                fontWeight: FontWeight.w600,
+                                height: 1.2, // 줄 간격 조정
+                              ),
+                              textAlign: TextAlign.center, // 텍스트 중앙 정렬
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

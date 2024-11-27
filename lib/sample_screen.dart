@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:seniguard/login_platform.dart';
-// import 'package:social_login_app/login_platform.dart';
 
 import 'package:seniguard/select_page.dart';
 

@@ -50,6 +50,7 @@ class _StartAppState extends State<StartApp> {
       );
     });
   }
+  
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
