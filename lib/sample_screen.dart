@@ -80,29 +80,55 @@ class _LoginState extends State<LoginPage> {
               Positioned(
                 left: screenWidth * 0.15,
                 top: screenHeight * 0.5,
-                child: SizedBox(
+                child: Container(
                   width: screenWidth * 0.7,
                   child: Column(
                     children: [
-                      Text(
-                        '더나은 삶을 위한 한걸음',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: const Color(0xFF53B175),
-                          fontSize: screenWidth * 0.05, // Relative font size
-                          fontFamily: 'Freesentation',
-                          fontWeight: FontWeight.w300,
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Color(0xFF53B175), // 테두리 색
+                            width: 2, // 테두리 두께
+                          ),
+                          color: Color(0xFF53B175),
+                          borderRadius:
+                              BorderRadius.circular(20), // 테두리 모서리 둥글게 설정
+                        ),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 10), // 텍스트와 테두리 간격 조정
+                        child: Text(
+                          '더나은 삶을 위한 한걸음',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: screenWidth * 0.05, // Relative font size
+                            fontFamily: 'Freesentation',
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                       SizedBox(height: screenHeight * 0.02),
-                      Text(
-                        '행복을 위한\n당신의 한걸음',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: const Color(0xFF53B175),
-                          fontSize: screenWidth * 0.1, // Relative font size
-                          fontFamily: 'Freesentation',
-                          fontWeight: FontWeight.w800,
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Color(0xFF53B175), // 테두리 색
+                            width: 2, // 테두리 두께
+                          ),
+                          color: Color(0xFF53B175),
+                          borderRadius:
+                              BorderRadius.circular(20), // 테두리 모서리 둥글게 설정
+                        ),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 10), // 텍스트와 테두리 간격 조정
+                        child: Text(
+                          '행복을 위한\n당신의 한걸음',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: screenWidth * 0.1, // Relative font size
+                            fontFamily: 'Freesentation',
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ],
@@ -140,6 +166,7 @@ class _LoginState extends State<LoginPage> {
   }
 
   void signInWithKakao() async {
+    // 캡스톤 유저 토큰 발급하지 않는 카카오톡 로그인 로직
     try {
       print('start login');
       bool isInstalled = await isKakaoTalkInstalled();
@@ -148,48 +175,7 @@ class _LoginState extends State<LoginPage> {
           ? await UserApi.instance.loginWithKakaoTalk()
           : await UserApi.instance.loginWithKakaoAccount();
 
-      final url_for_kakao = Uri.https('kapi.kakao.com', '/v2/user/me');
-
-      final response_for_kakao = await http.get(
-        url_for_kakao,
-        headers: {
-          HttpHeaders.authorizationHeader: 'Bearer ${token.accessToken}'
-        },
-      );
-
-      final profileInfo = json.decode(response_for_kakao.body);
-
-      print('Kakao_user_data : ' + profileInfo.toString());
-      print('Kakao_user_Access_Token : Bearer ' +
-          token.accessToken); // 넘겨야 할 토큰 값
-
-      final String accToken = 'Bearer ' + token.accessToken; // 토큰 값을 따로 저장
-      const String baseUrl = 'http://34.64.182.238:8100/user/auth/kakao';
-
-      // 요청할 URL 생성
-      final Uri url_for_capstone = Uri.parse(baseUrl);
-
-      // 헤더에 포함할 데이터
-      final Map<String, String> headers = {
-        'Content-Type': 'application/json',
-        'kakaoAccessToken': '$accToken', // 예: 인증 토큰
-      };
-      final response_for_capstone =
-          await http.get(url_for_capstone, headers: headers);
-
-      // 서버 응답이 성공적(200 OK)인지 확인
-      if (response_for_capstone.statusCode == 200) {
-        // JSON 데이터 파싱
-        final data = json.decode(response_for_capstone.body);
-        print('Response data: $data');
-
-        final String dataAccToken =
-            data['access_token']; // 카카오 토큰을 사용해 발급한 캡스톤 유저 토큰
-        print('Capstone_AccessToken : $dataAccToken');
-      } else {
-        print(
-            'Request failed with status: ${response_for_capstone.statusCode}');
-      }
+      print('Kakao_user_Access_Token : Bearer ${token.accessToken}');
 
       setState(() {
         _loginPlatform = LoginPlatform.kakao;
@@ -200,11 +186,79 @@ class _LoginState extends State<LoginPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) => FigmaToCode_2()), // HomePage로 이동
+            builder: (context) => const FigmaToCode_2()), // HomePage로 이동
       );
     } catch (error) {
-      // print(await KakaoSdk.origin); 키 해시 확인용
       print('카카오톡으로 로그인 실패 $error');
     }
   }
+
+  // void signInWithKakao() async { // 캡스톤 유저 토큰 발급용 카카오톡 로그인 로직
+  //   try {
+  //     print('start login');
+  //     bool isInstalled = await isKakaoTalkInstalled();
+
+  //     OAuthToken token = isInstalled
+  //         ? await UserApi.instance.loginWithKakaoTalk()
+  //         : await UserApi.instance.loginWithKakaoAccount();
+
+  //     final url_for_kakao = Uri.https('kapi.kakao.com', '/v2/user/me');
+
+  //     final response_for_kakao = await http.get(
+  //       url_for_kakao,
+  //       headers: {
+  //         HttpHeaders.authorizationHeader: 'Bearer ${token.accessToken}'
+  //       },
+  //     );
+
+  //     final profileInfo = json.decode(response_for_kakao.body);
+
+  //     print('Kakao_user_data : ' + profileInfo.toString());
+  //     print('Kakao_user_Access_Token : Bearer ' +
+  //         token.accessToken); // 넘겨야 할 토큰 값
+
+  //     final String accToken = 'Bearer ' + token.accessToken; // 토큰 값을 따로 저장
+  //     const String baseUrl = 'http://34.64.182.238:8100/user/auth/kakao';
+
+  //     // 요청할 URL 생성
+  //     final Uri url_for_capstone = Uri.parse(baseUrl);
+
+  //     // 헤더에 포함할 데이터
+  //     final Map<String, String> headers = {
+  //       'Content-Type': 'application/json',
+  //       'kakaoAccessToken': '$accToken', // 예: 인증 토큰
+  //     };
+  //     final response_for_capstone =
+  //         await http.get(url_for_capstone, headers: headers);
+
+  //     // 서버 응답이 성공적(200 OK)인지 확인
+  //     if (response_for_capstone.statusCode == 200) {
+  //       // JSON 데이터 파싱
+  //       final data = json.decode(response_for_capstone.body);
+  //       print('Response data: $data');
+
+  //       final String dataAccToken =
+  //           data['access_token']; // 카카오 토큰을 사용해 발급한 캡스톤 유저 토큰
+  //       print('Capstone_AccessToken : $dataAccToken');
+  //     } else {
+  //       print(
+  //           'Request failed with status: ${response_for_capstone.statusCode}');
+  //     }
+
+  //     setState(() {
+  //       _loginPlatform = LoginPlatform.kakao;
+  //     });
+  //     print('카카오톡 로그인 성공');
+
+  //     // 로그인 성공 후 새로운 페이지로 이동
+  //     Navigator.pushReplacement(
+  //       context,
+  //       MaterialPageRoute(
+  //           builder: (context) => const FigmaToCode_2()), // HomePage로 이동
+  //     );
+  //   } catch (error) {
+  //     // print(await KakaoSdk.origin); 키 해시 확인용
+  //     print('카카오톡으로 로그인 실패 $error');
+  //   }
+  // }
 }

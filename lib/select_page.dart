@@ -19,6 +19,20 @@ class FigmaToCode_2 extends StatelessWidget {
         scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
       ),
       home: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(40), // 앱바 높이 지정
+          child: AppBar(
+            backgroundColor: Color(0xFF53B175), // 앱바 배경색
+            title: Text(
+              '기본 화면',
+              style: TextStyle(
+                fontSize: 20, // 앱바의 제목 텍스트 크기
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            centerTitle: true,
+          ),
+        ),
         body: ListView(
           children: [
             SelectPage(),
@@ -63,17 +77,8 @@ class SelectPage extends StatelessWidget {
           child: Stack(
             children: [
               Positioned(
-                left: 0,
-                top: 0,
-                child: Container(
-                  width: screenWidth,
-                  height: screenHeight * 0.04,
-                  decoration: BoxDecoration(color: Color(0xFF53B175)),
-                ),
-              ),
-              Positioned(
                 left: screenWidth * 0.067,
-                top: screenHeight * 0.072,
+                top: screenHeight * 0.03,
                 child: SizedBox(
                   width: screenWidth * 0.48,
                   child: Text(
@@ -90,7 +95,7 @@ class SelectPage extends StatelessWidget {
               ),
               Positioned(
                 left: screenWidth * 0.067,
-                top: screenHeight * 0.105,
+                top: screenHeight * 0.055,
                 child: Text(
                   'can choose what you want to do:',
                   style: TextStyle(
@@ -106,7 +111,7 @@ class SelectPage extends StatelessWidget {
               // 실시간 시계
               Positioned(
                 left: screenWidth * 0.79,
-                top: screenHeight * 0.062,
+                top: screenHeight * 0.042,
                 child: ValueListenableBuilder<String>(
                   valueListenable: _currentTimeNotifier,
                   builder: (context, currentTime, child) {
@@ -162,7 +167,7 @@ class SelectPage extends StatelessWidget {
               Positioned(
                 left: screenWidth * 0.7, // 화면의 왼쪽에 맞춤
                 right: screenWidth * 0.1,
-                top: screenHeight * 0.8,
+                top: screenHeight * 0.73,
                 child: GestureDetector(
                   onTap: () {
                     // 네비게이션 동작
@@ -190,7 +195,7 @@ class SelectPage extends StatelessWidget {
               // 산책 이동 버튼
               Positioned(
                 left: screenWidth * 0.068,
-                top: screenHeight * 0.492,
+                top: screenHeight * 0.442,
                 child: Container(
                   width: screenWidth * 0.423,
                   height: screenHeight * 0.316,
@@ -270,7 +275,7 @@ class SelectPage extends StatelessWidget {
               // 챗봇 이동 버튼
               Positioned(
                 left: screenWidth * 0.069,
-                top: screenHeight * 0.138,
+                top: screenHeight * 0.098,
                 child: GestureDetector(
                   onTap: () {
                     // 네비게이션 동작
@@ -359,7 +364,7 @@ class SelectPage extends StatelessWidget {
               // 체크리스트 버튼
               Positioned(
                 left: screenWidth * 0.54,
-                top: screenHeight * 0.138,
+                top: screenHeight * 0.098,
                 child: GestureDetector(
                   onTap: () {
                     // 네비게이션 동작
@@ -453,7 +458,7 @@ class SelectPage extends StatelessWidget {
               // 알람
               Positioned(
                 left: screenWidth * 0.54,
-                top: screenHeight * 0.492,
+                top: screenHeight * 0.442,
                 child: Container(
                   width: screenWidth * 0.423,
                   height: screenHeight * 0.316,
@@ -463,78 +468,25 @@ class SelectPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: screenWidth * 0.03), // 좌우 여백 추가
+                    child: Center(
+                      // 텍스트를 중앙에 배치
+                      child: Text(
+                        '오늘 아침에 \n멀미약을 복용하셨나요?', // 여기에 넣을 텍스트 작성
+                        style: TextStyle(
+                          color: Colors.black, // 텍스트 색상
+                          fontSize: screenWidth * 0.05, // 상대적인 글꼴 크기
+                          fontWeight: FontWeight.bold, // 굵은 글꼴
+                        ),
+                        textAlign: TextAlign.center, // 텍스트 가운데 정렬
+                      ),
+                    ),
+                  ),
                 ),
               ),
               // 알람
-
-              // Positioned(
-              //   left: screenWidth * 0.545,
-              //   top: screenHeight * 0.138,
-              //   child: Container(
-              //     width: screenWidth * 0.415,
-              //     height: screenHeight * 0.212,
-              //     clipBehavior: Clip.antiAlias,
-              //     decoration: BoxDecoration(),
-              //     child: Stack(),
-              //   ),
-              // ),
-              // Positioned(
-              //   left: screenWidth * 0.069,
-              //   top: screenHeight * 0.524,
-              //   child: Container(
-              //     width: screenWidth * 0.419,
-              //     height: screenHeight * 0.186,
-              //     clipBehavior: Clip.antiAlias,
-              //     decoration: BoxDecoration(),
-              //     child: Stack(),
-              //   ),
-              // ),
-              // Positioned(
-              //   left: screenWidth * 0.054,
-              //   top: screenHeight * 0.165,
-              //   child: Container(
-              //     width: screenWidth * 0.417,
-              //     height: screenHeight * 0.200,
-              //     child: Row(
-              //       mainAxisSize: MainAxisSize.min,
-              //       mainAxisAlignment: MainAxisAlignment.start,
-              //       crossAxisAlignment: CrossAxisAlignment.center,
-              //       children: [
-              //         Container(
-              //           width: screenWidth * 0.458,
-              //           height: screenHeight * 0.138,
-              //           clipBehavior: Clip.antiAlias,
-              //           decoration: BoxDecoration(),
-              //           child: Stack(
-              //             children: [
-              //               Positioned(
-              //                 left: 0,
-              //                 top: 0,
-              //                 child: Container(
-              //                   width: screenWidth * 0.458,
-              //                   height: screenHeight * 0.138,
-              //                   child: Stack(
-              //                     children: [
-              //                       Positioned(
-              //                         left: 0,
-              //                         top: 0,
-              //                         child: Container(
-              //                           width: screenWidth * 0.458,
-              //                           height: screenHeight * 0.138,
-              //                           child: Stack(),
-              //                         ),
-              //                       ),
-              //                     ],
-              //                   ),
-              //                 ),
-              //               ),
-              //             ],
-              //           ),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         ),

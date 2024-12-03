@@ -118,10 +118,10 @@ class _ResponsiveUIState extends State<ResponsiveUI> {
                       padding: EdgeInsets.symmetric(
                           horizontal: screenSize.width * 0.05),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(
-                            '닉네임 :',
+                            '성  명 :',
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: screenSize.width * 0.05,
@@ -136,19 +136,10 @@ class _ResponsiveUIState extends State<ResponsiveUI> {
                               color: Colors.black,
                               fontSize: screenSize.width * 0.05,
                               fontWeight: FontWeight.w800,
+                              
                             ),
                           ),
                           // 카톡 이름
-
-                          Text(
-                            '변경',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: screenSize.width * 0.04,
-                              fontWeight: FontWeight.w400,
-                              backgroundColor: const Color(0xFF53B175),
-                            ),
-                          ),
                         ],
                       ),
                     ),
@@ -167,7 +158,7 @@ class _ResponsiveUIState extends State<ResponsiveUI> {
                       padding: EdgeInsets.symmetric(
                           horizontal: screenSize.width * 0.05),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(
                             '주  소 :',
@@ -188,16 +179,6 @@ class _ResponsiveUIState extends State<ResponsiveUI> {
                             ),
                           ),
                           // 카톡 주소
-
-                          Text(
-                            '변경',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: screenSize.width * 0.04,
-                              fontWeight: FontWeight.w400,
-                              backgroundColor: const Color(0xFF53B175),
-                            ),
-                          ),
                         ],
                       ),
                     ),
@@ -216,7 +197,7 @@ class _ResponsiveUIState extends State<ResponsiveUI> {
                       padding: EdgeInsets.symmetric(
                           horizontal: screenSize.width * 0.05),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(
                             '이메일 :',
@@ -228,32 +209,12 @@ class _ResponsiveUIState extends State<ResponsiveUI> {
                           ),
 
                           // 카톡 주소
-                          Expanded(
-                            child: Text(
-                              email ?? '홍 길 동', // 닉네임이 없을 경우 기본값 설정
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: screenSize.width * 0.05,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                          ),
-
-                          // 변경 버튼
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF53B175),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Text(
-                              '변경',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: screenSize.width * 0.04,
-                                fontWeight: FontWeight.w400,
-                              ),
+                          Text(
+                            email ?? '홍 길 동', // 닉네임이 없을 경우 기본값 설정
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: screenSize.width * 0.05,
+                              fontWeight: FontWeight.w800,
                             ),
                           ),
                         ],
@@ -262,6 +223,45 @@ class _ResponsiveUIState extends State<ResponsiveUI> {
                   ),
                 ),
                 // 카카오톡 이메일
+
+                // 질환 섹션
+                Positioned(
+                  left: screenSize.width * 0.1,
+                  top: screenSize.height * 0.9,
+                  child: Container(
+                    width: screenSize.width * 0.8,
+                    height: screenSize.height * 0.08,
+                    decoration: const BoxDecoration(color: Color(0xFFD9D9D9)),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: screenSize.width * 0.05),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            '지  병 :',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: screenSize.width * 0.05,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+
+                          // 질환 명
+                          Text(
+                            '호흡기 질환, 관절염, 간 질환',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: screenSize.width * 0.04,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                // 질환 섹션
               ],
             ),
           ),
