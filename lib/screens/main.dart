@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() => runApp(const MyApp());
 
@@ -18,17 +20,165 @@ class _MyAppState extends State<MyApp> {
   List<RouteInfo> _routes = [];
   int _selectedRouteIndex = 0;
 
-  // 산책 경로 옵션 - 이곡역 방향 코스
-  final List<LatLng> _destinations = [
-    LatLng(35.8570, 128.5000),  // 달구벌대로 시작점
-    LatLng(35.8540, 128.5040),  // 달구벌대로 중간
-    LatLng(35.8510, 128.5080),  // 이곡역
+  final List<Map<String, dynamic>> walkingTrails = [
+    {
+      "구간시점위도": "35.85545507671219",  // 계명대 동문
+      "구간시점경도": "128.4925301902473",
+      "구간종점위도": "35.8510",
+      "구간종점경도": "128.5080",
+      "위치명": "달구벌대로 코스",
+      "구간난이도": "하",
+      "산책로구간거리": "2000.0",
+      "구간시점위치": "계명대학교 동문",
+      "구간종점위치": "이곡역",
+      "산책로설명": "달구벌대로를 따라 걷는 가장 빠른 경로",
+    },
+    {
+      "구간시점위도": "35.85545507671219",  // 계명대 동문
+      "구간시점경도": "128.4925301902473",
+      "구간종점위도": "35.8510",
+      "구간종점경도": "128.5080",
+      "위치명": "주택가 코스",
+      "구간난이도": "중",
+      "산책로구간거리": "2200.0",
+      "구간시점위치": "계명대학교 동문",
+      "구간종점위치": "이곡역",
+      "산책로설명": "조용한 주택가를 통과하는 여유로운 경로",
+    },
+    {
+      "구간시점위도": "35.85545507671219",  // 계명대 동문
+      "구간시점경도": "128.4925301902473",
+      "구간종점위도": "35.8510",
+      "구간종점경도": "128.5080",
+      "위치명": "공원 코스",
+      "구간난이도": "중상",
+      "산책로구간거리": "2300.0",
+      "구간시점위치": "계명대학교 동문",
+      "구간종점위치": "이곡역",
+      "산책로설명": "근처 공원을 경유하는 자연친화적인 경로",
+    },
   ];
+
+  Future<void> _loadWalkingTrails() async {
+    setState(() {
+      _routes.clear();
+      _polylines.clear();
+      _markers.clear();
+
+      // 시작점 마커 추가
+      _markers.add(Marker(
+        markerId: const MarkerId('current_location'),
+        position: LatLng(35.85545507671219, 128.4925301902473),
+        infoWindow: const InfoWindow(title: '계명대학교 동문'),
+      ));
+
+      // 각 산책로에 대한 경로 생성
+      for (int i = 0; i < walkingTrails.length; i++) {
+        final trail = walkingTrails[i];
+        
+        final startLat = double.parse(trail['구간시점위도']);
+        final startLng = double.parse(trail['구간시점경도']);
+        final endLat = double.parse(trail['구간종점위도']);
+        final endLng = double.parse(trail['구간종점경도']);
+
+        List<LatLng> points = _createDetailedRoute(
+          LatLng(startLat, startLng),
+          LatLng(endLat, endLng),
+          i,
+        );
+
+        final distance = double.parse(trail['산책로구간거리']);
+        final distanceStr = distance >= 1000 
+            ? '${(distance/1000).toStringAsFixed(1)}km' 
+            : '${distance.toStringAsFixed(0)}m';
+
+        _routes.add(RouteInfo(
+          points: points,
+          distance: distanceStr,
+          duration: '예상 소요시간: ${(distance/80).round()}분',
+          routeName: '${trail['위치명']} (${trail['구간난이도']})',
+          index: i,
+        ));
+
+        _polylines.add(Polyline(
+          polylineId: PolylineId('route_$i'),
+          visible: true,
+          points: points,
+          color: _getRouteColor(i),
+          width: 4,
+        ));
+
+        // 시작점과 끝점에 마커 추가
+        _markers.add(Marker(
+          markerId: MarkerId('trail_start_$i'),
+          position: LatLng(startLat, startLng),
+          infoWindow: InfoWindow(
+            title: '${trail['위치명']} 시작점',
+            snippet: trail['구간시점위치'],
+          ),
+        ));
+
+        _markers.add(Marker(
+          markerId: MarkerId('trail_end_$i'),
+          position: LatLng(endLat, endLng),
+          infoWindow: InfoWindow(
+            title: '${trail['위치명']} 종점',
+            snippet: '거리: $distanceStr, 난이도: ${trail['구간난이도']}\n${trail['산책로설명']}',
+          ),
+        ));
+      }
+    });
+  }
+
+  // 상세 경로 생성 함수 수정
+  List<LatLng> _createDetailedRoute(LatLng start, LatLng end, int routeIndex) {
+    List<LatLng> points = [];
+    
+    switch(routeIndex) {
+      case 0:  // 달구벌대로 직진 코스
+        points = [
+          start,  // 동문
+          LatLng(35.8545, 128.4940),  // 달구벌대로 진입
+          LatLng(35.8535, 128.4960),  // 달구벌대로 1
+          LatLng(35.8525, 128.4980),  // 달구벌대로 2
+          LatLng(35.8515, 128.5020),  // 달구벌대로 3
+          end,  // 이곡역
+        ];
+        break;
+      
+      case 1:  // 주택가 경유 코스
+        points = [
+          start,  // 동문
+          LatLng(35.8540, 128.4930),  // 주택가 진입
+          LatLng(35.8530, 128.4950),  // 주택가 1
+          LatLng(35.8520, 128.4970),  // 주택가 2
+          LatLng(35.8515, 128.5000),  // 주택가 3
+          LatLng(35.8510, 128.5040),  // 달구벌대로 합류
+          end,  // 이곡역
+        ];
+        break;
+      
+      case 2:  // 공원 경유 코스
+        points = [
+          start,  // 동문
+          LatLng(35.8550, 128.4950),  // 공원 방향
+          LatLng(35.8540, 128.4970),  // 공원 1
+          LatLng(35.8530, 128.5000),  // 공원 2
+          LatLng(35.8520, 128.5030),  // 공원 3
+          LatLng(35.8515, 128.5060),  // 달구벌대로 합류
+          end,  // 이곡역
+        ];
+        break;
+    }
+    
+    return points;
+  }
 
   @override
   void initState() {
     super.initState();
     _getCurrentLocation();
+    _loadWalkingTrails();  // API 호출 대신 로컬 데이터 사용
   }
 
   Future<void> _getCurrentLocation() async {
@@ -45,7 +195,6 @@ class _MyAppState extends State<MyApp> {
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
-    _loadAllRoutes();
     
     // 지도 초기 위치 설정
     mapController.animateCamera(
@@ -54,102 +203,6 @@ class _MyAppState extends State<MyApp> {
         15.0,
       ),
     );
-  }
-
-  Future<void> _loadAllRoutes() async {
-    _routes.clear();
-    _polylines.clear();
-
-    for (int i = 0; i < _destinations.length; i++) {
-      await _getRoute(_destinations[i], i);
-    }
-  }
-
-  Future<void> _getRoute(LatLng destination, int index) async {
-    try {
-      List<LatLng> points;
-      String distance;
-      String duration;
-      String routeName;
-
-      switch(index) {
-        case 0:  // 첫 번째 경로 - 달구벌대로 직진 코스
-          points = [
-            LatLng(35.85545507671219, 128.4925301902473),  // 동문
-            LatLng(35.8545, 128.4940),  // 달구벌대로 진입
-            LatLng(35.8535, 128.4960),  // 달구벌대로 1
-            LatLng(35.8525, 128.4980),  // 달구벌대로 2
-            LatLng(35.8515, 128.5020),  // 달구벌대로 3
-            LatLng(35.8510, 128.5080),  // 이곡역
-          ];
-          distance = '약 2.0km';
-          duration = '도보 25분';
-          routeName = '달구벌대로 직진 코스';
-          break;
-
-        case 1:  // 두 번째 경로 - 주택가 경유 코스
-          points = [
-            LatLng(35.85545507671219, 128.4925301902473),  // 동문
-            LatLng(35.8540, 128.4930),  // 주택가 진입
-            LatLng(35.8530, 128.4950),  // 주택가 1
-            LatLng(35.8520, 128.4970),  // 주택가 2
-            LatLng(35.8515, 128.5000),  // 주택가 3
-            LatLng(35.8510, 128.5040),  // 달구벌대로 합류
-            LatLng(35.8510, 128.5080),  // 이곡역
-          ];
-          distance = '약 2.2km';
-          duration = '도보 30분';
-          routeName = '주택가 경유 코스';
-          break;
-
-        case 2:  // 세 번째 경로 - 공원 경유 코스
-          points = [
-            LatLng(35.85545507671219, 128.4925301902473),  // 동문
-            LatLng(35.8550, 128.4950),  // 공원 방향
-            LatLng(35.8540, 128.4970),  // 공원 1
-            LatLng(35.8530, 128.5000),  // 공원 2
-            LatLng(35.8520, 128.5030),  // 공원 3
-            LatLng(35.8515, 128.5060),  // 달구벌대로 합류
-            LatLng(35.8510, 128.5080),  // 이곡역
-          ];
-          distance = '약 2.3km';
-          duration = '도보 32분';
-          routeName = '공원 경유 코스';
-          break;
-
-        default:
-          return;
-      }
-
-      setState(() {
-        _routes.add(RouteInfo(
-          points: points,
-          distance: distance,
-          duration: duration,
-          routeName: routeName,
-          index: index,
-        ));
-
-        _polylines.add(Polyline(
-          polylineId: PolylineId('route_$index'),
-          visible: true,
-          points: points,
-          color: _getRouteColor(index),
-          width: 4,
-        ));
-
-        _markers.add(Marker(
-          markerId: MarkerId('destination_$index'),
-          position: destination,
-          infoWindow: InfoWindow(
-            title: routeName,
-            snippet: '거리: $distance, 시간: $duration',
-          ),
-        ));
-      });
-    } catch (e) {
-      print('Error creating route: $e');
-    }
   }
 
   Color _getRouteColor(int index) {
