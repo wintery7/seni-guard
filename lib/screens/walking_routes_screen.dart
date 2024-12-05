@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-void main() => runApp(const MyApp());
+void main() => runApp(const WalkingRoutesScreen());
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class WalkingRoutesScreen extends StatefulWidget {
+  const WalkingRoutesScreen({super.key});
 
   @override
-  _MyAppState createState() => _MyAppState();
+  _WalkingRoutesScreenState createState() => _WalkingRoutesScreenState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _WalkingRoutesScreenState extends State<WalkingRoutesScreen> {
   late GoogleMapController mapController;
   Set<Polyline> _polylines = {};
   Set<Marker> _markers = {};
