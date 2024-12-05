@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:seniguard/check_list.dart';
 import 'package:seniguard/screens/walking_routes_screen.dart';
+import 'package:seniguard/mypage.dart';
 
 void main() {
   runApp(const FigmaToCode_2());
@@ -19,6 +20,20 @@ class FigmaToCode_2 extends StatelessWidget {
         scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
       ),
       home: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(40), // 앱바 높이 지정
+          child: AppBar(
+            backgroundColor: Color(0xFF53B175), // 앱바 배경색
+            title: Text(
+              '기본 화면',
+              style: TextStyle(
+                fontSize: 20, // 앱바의 제목 텍스트 크기
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            centerTitle: true,
+          ),
+        ),
         body: ListView(
           children: [
             SelectPage(),
@@ -63,17 +78,8 @@ class SelectPage extends StatelessWidget {
           child: Stack(
             children: [
               Positioned(
-                left: 0,
-                top: 0,
-                child: Container(
-                  width: screenWidth,
-                  height: screenHeight * 0.04,
-                  decoration: BoxDecoration(color: Color(0xFF53B175)),
-                ),
-              ),
-              Positioned(
                 left: screenWidth * 0.067,
-                top: screenHeight * 0.072,
+                top: screenHeight * 0.03,
                 child: SizedBox(
                   width: screenWidth * 0.48,
                   child: Text(
@@ -90,7 +96,7 @@ class SelectPage extends StatelessWidget {
               ),
               Positioned(
                 left: screenWidth * 0.067,
-                top: screenHeight * 0.105,
+                top: screenHeight * 0.055,
                 child: Text(
                   'can choose what you want to do:',
                   style: TextStyle(
@@ -106,7 +112,7 @@ class SelectPage extends StatelessWidget {
               // 실시간 시계
               Positioned(
                 left: screenWidth * 0.79,
-                top: screenHeight * 0.062,
+                top: screenHeight * 0.042,
                 child: ValueListenableBuilder<String>(
                   valueListenable: _currentTimeNotifier,
                   builder: (context, currentTime, child) {
@@ -131,657 +137,61 @@ class SelectPage extends StatelessWidget {
               // 백그라운드 이미지
               Positioned(
                 left: 0, // 화면에 맞게 위치 설정
-                top: screenHeight * 0.45, // 상단 여백을 계산하여 위치 설정
+                bottom: 0,
+                right: 0,
                 child: Container(
                   width: screenWidth, // 화면 너비에 맞게 설정
                   height: screenHeight * 0.5, // 화면 높이에 맞게 설정
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage("images/select_page_back_image.png"),
-                      fit: BoxFit.fitWidth, // 이미지를 화면에 맞게 커버
+                      fit: BoxFit.cover, // 이미지를 화면에 맞게 커버
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 0, // 화면의 왼쪽에 맞춤
+                right: 0,
+                bottom: 0, // 하단에 배치
+                child: Container(
+                  width: screenWidth, // 화면 전체 너비 사용
+                  height: screenHeight * 0.2,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("images/flowers.png"), // 이미지 경로
+                      fit: BoxFit.cover, // 이미지를 컨테이너 크기에 맞춤
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                left: screenWidth * 0.7, // 화면의 왼쪽에 맞춤
+                right: screenWidth * 0.1,
+                top: screenHeight * 0.73,
+                child: GestureDetector(
+                  onTap: () {
+                    // 네비게이션 동작
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Page_Setting(), // 이동할 페이지
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: screenWidth * 0.1, // 화면 전체 너비 사용
+                    height: screenHeight * 0.2,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage("images/mypage_button.png"), // 이미지 경로
+                        fit: BoxFit.fitWidth, // 이미지를 컨테이너 크기에 맞춤
+                      ),
                     ),
                   ),
                 ),
               ),
               // 백그라운드 이미지
-
-              // Positioned(
-              //   left: -screenWidth * 0.066,
-              //   top: screenHeight * 0.81,
-              //   child: Container(
-              //     width: screenWidth * 1.11,
-              //     height: screenHeight * 0.28,
-              //     child: Stack(
-              //       children: [
-              //         Positioned(
-              //           left: 0,
-              //           top: screenHeight * 0.053,
-              //           child: Container(
-              //             width: screenWidth * 0.295,
-              //             height: screenHeight * 0.226,
-              //             child: Stack(
-              //               children: [
-              //                 Positioned(
-              //                   left: 0,
-              //                   top: screenHeight * 0.091,
-              //                   child: Container(
-              //                     width: screenWidth * 0.295,
-              //                     height: screenHeight * 0.136,
-              //                     child: Stack(),
-              //                   ),
-              //                 ),
-              //                 Positioned(
-              //                   left: screenWidth * 0.039,
-              //                   top: screenHeight * 0.129,
-              //                   child: Container(
-              //                     width: screenWidth * 0.105,
-              //                     height: screenHeight * 0.049,
-              //                     child: FlutterLogo(),
-              //                   ),
-              //                 ),
-              //                 Positioned(
-              //                   left: screenWidth * 0.159,
-              //                   top: screenHeight * 0.113,
-              //                   child: Container(
-              //                     width: screenWidth * 0.086,
-              //                     height: screenHeight * 0.039,
-              //                     child: FlutterLogo(),
-              //                   ),
-              //                 ),
-              //                 Positioned(
-              //                   left: screenWidth * 0.029,
-              //                   top: -screenHeight * 0.004,
-              //                   child: Container(
-              //                     width: screenWidth * 0.236,
-              //                     height: screenHeight * 0.108,
-              //                     child: Stack(
-              //                       children: [
-              //                         Positioned(
-              //                           left: -screenWidth * 0.006,
-              //                           top: -screenHeight * 0.001,
-              //                           child: Container(
-              //                             width: screenWidth * 0.249,
-              //                             height: screenHeight * 0.109,
-              //                             child: Stack(
-              //                               children: [
-              //                                 Positioned(
-              //                                   left: screenWidth * 0.085,
-              //                                   top: screenHeight * 0.001,
-              //                                   child: Container(
-              //                                     width: screenWidth * 0.079,
-              //                                     height: screenHeight * 0.108,
-              //                                     child: FlutterLogo(),
-              //                                   ),
-              //                                 ),
-              //                                 Positioned(
-              //                                   left: screenWidth * 0.002,
-              //                                   top: screenHeight * 0.054,
-              //                                   child: Transform(
-              //                                     transform: Matrix4.identity()
-              //                                       ..translate(0.0, 0.0)
-              //                                       ..rotateZ(-1.19),
-              //                                     child: Container(
-              //                                       width: screenWidth * 0.066,
-              //                                       height: screenHeight * 0.129,
-              //                                       child: FlutterLogo(),
-              //                                     ),
-              //                                   ),
-              //                                 ),
-              //                                 Positioned(
-              //                                   left: screenWidth * 0.087,
-              //                                   top: screenHeight * 0.109,
-              //                                   child: Transform(
-              //                                     transform: Matrix4.identity()
-              //                                       ..translate(0.0, 0.0)
-              //                                       ..rotateZ(-2.60),
-              //                                     child: Container(
-              //                                       width: screenWidth * 0.074,
-              //                                       height: screenHeight * 0.117,
-              //                                       child: FlutterLogo(),
-              //                                     ),
-              //                                   ),
-              //                                 ),
-              //                                 Positioned(
-              //                                   left: screenWidth * 0.227,
-              //                                   top: screenHeight * 0.088,
-              //                                   child: Transform(
-              //                                     transform: Matrix4.identity()
-              //                                       ..translate(0.0, 0.0)
-              //                                       ..rotateZ(2.60),
-              //                                     child: Container(
-              //                                       width: screenWidth * 0.074,
-              //                                       height: screenHeight * 0.117,
-              //                                       child: FlutterLogo(),
-              //                                     ),
-              //                                   ),
-              //                                 ),
-              //                                 Positioned(
-              //                                   left: screenWidth * 0.224,
-              //                                   top: screenHeight * 0.019,
-              //                                   child: Transform(
-              //                                     transform: Matrix4.identity()
-              //                                       ..translate(0.0, 0.0)
-              //                                       ..rotateZ(1.19),
-              //                                     child: Container(
-              //                                       width: screenWidth * 0.066,
-              //                                       height: screenHeight * 0.129,
-              //                                       child: FlutterLogo(),
-              //                                     ),
-              //                                   ),
-              //                                 ),
-              //                               ],
-              //                             ),
-              //                           ),
-              //                         ),
-              //                         Positioned(
-              //                           left: screenWidth * 0.054,
-              //                           top: -screenHeight * 0.005,
-              //                           child: Transform(
-              //                             transform: Matrix4.identity()
-              //                               ..translate(0.0, 0.0)
-              //                               ..rotateZ(0.27),
-              //                             child: Container(
-              //                               width: screenWidth * 0.201,
-              //                               height: screenHeight * 0.096,
-              //                               child: FlutterLogo(),
-              //                             ),
-              //                           ),
-              //                         ),
-              //                       ],
-              //                     ),
-              //                   ),
-              //                 ),
-              //               ],
-              //             ),
-              //           ),
-              //         ),
-              //         Positioned(
-              //           left: screenWidth * 0.219,
-              //           top: 0,
-              //           child: Container(
-              //             width: screenWidth * 0.295,
-              //             height: screenHeight * 0.226,
-              //             child: Stack(
-              //               children: [
-              //                 Positioned(
-              //                   left: 0,
-              //                   top: screenHeight * 0.091,
-              //                   child: Container(
-              //                     width: screenWidth * 0.295,
-              //                     height: screenHeight * 0.136,
-              //                     child: Stack(),
-              //                   ),
-              //                 ),
-              //                 Positioned(
-              //                   left: screenWidth * 0.13,
-              //                   top: screenHeight * 0.113,
-              //                   child: Transform(
-              //                     transform: Matrix4.identity()
-              //                       ..translate(0.0, 0.0)
-              //                       ..rotateZ(2.70),
-              //                     child: Container(
-              //                       width: screenWidth * 0.134,
-              //                       height: screenHeight * 0.068,
-              //                       child: Stack(
-              //                         children: [
-              //                           Positioned(
-              //                             left: screenWidth * 0.021,
-              //                             top: 0,
-              //                             child: Container(
-              //                               width: screenWidth * 0.091,
-              //                               height: screenHeight * 0.029,
-              //                               child: Stack(
-              //                                 children: [
-              //                                   Positioned(
-              //                                     left: screenWidth * 0.003,
-              //                                     top: screenHeight * 0.005,
-              //                                     child: Container(
-              //                                       width: screenWidth * 0.006,
-              //                                       height: screenHeight * 0.003,
-              //                                       decoration: ShapeDecoration(
-              //                                         color: Color(0xFFFB5D66),
-              //                                         shape: OvalBorder(),
-              //                                       ),
-              //                                     ),
-              //                                   ),
-              //                                   Positioned(
-              //                                     left: screenWidth * 0.021,
-              //                                     top: screenHeight * 0.008,
-              //                                     child: Container(
-              //                                       width: screenWidth * 0.006,
-              //                                       height: screenHeight * 0.003,
-              //                                       decoration: ShapeDecoration(
-              //                                         color: Color(0xFFFB5D66),
-              //                                         shape: OvalBorder(),
-              //                                       ),
-              //                                     ),
-              //                                   ),
-              //                                   Positioned(
-              //                                     left: screenWidth * 0.035,
-              //                                     top: screenHeight * 0.011,
-              //                                     child: Container(
-              //                                       width: screenWidth * 0.006,
-              //                                       height: screenHeight * 0.003,
-              //                                       decoration: ShapeDecoration(
-              //                                         color: Color(0xFFFB5D66),
-              //                                         shape: OvalBorder(),
-              //                                       ),
-              //                                     ),
-              //                                   ),
-              //                                   Positioned(
-              //                                     left: screenWidth * 0.083,
-              //                                     top: screenHeight * 0.018,
-              //                                     child: Container(
-              //                                       width: screenWidth * 0.006,
-              //                                       height: screenHeight * 0.003,
-              //                                       decoration: ShapeDecoration(
-              //                                         color: Color(0xFFFB5D66),
-              //                                         shape: OvalBorder(),
-              //                                       ),
-              //                                     ),
-              //                                   ),
-              //                                   Positioned(
-              //                                     left: screenWidth * 0.085,
-              //                                     top: screenHeight * 0.022,
-              //                                     child: Container(
-              //                                       width: screenWidth * 0.006,
-              //                                       height: screenHeight * 0.003,
-              //                                       decoration: ShapeDecoration(
-              //                                         color: Color(0xFFFB5D66),
-              //                                         shape: OvalBorder(),
-              //                                       ),
-              //                                     ),
-              //                                   ),
-              //                                   Positioned(
-              //                                     left: screenWidth * 0.014,
-              //                                     top: screenHeight * 0.021,
-              //                                     child: Container(
-              //                                       width: screenWidth * 0.006,
-              //                                       height: screenHeight * 0.003,
-              //                                       decoration: ShapeDecoration(
-              //                                         color: Color(0xFFFB5D66),
-              //                                         shape: OvalBorder(),
-              //                                       ),
-              //                                     ),
-              //                                   ),
-              //                                   Positioned(
-              //                                     left: screenWidth * 0.015,
-              //                                     top: screenHeight * 0.026,
-              //                                     child: Container(
-              //                                       width: screenWidth * 0.006,
-              //                                       height: screenHeight * 0.003,
-              //                                       decoration: ShapeDecoration(
-              //                                         color: Color(0xFFFB5D66),
-              //                                         shape: OvalBorder(),
-              //                                       ),
-              //                                     ),
-              //                                   ),
-              //                                   Positioned(
-              //                                     left: 0,
-              //                                     top: screenHeight * 0.008,
-              //                                     child: Container(
-              //                                       width: screenWidth * 0.007,
-              //                                       height: screenHeight * 0.003,
-              //                                       decoration: ShapeDecoration(
-              //                                         color: Color(0xFFFB5D66),
-              //                                         shape: OvalBorder(),
-              //                                       ),
-              //                                     ),
-              //                                   ),
-              //                                   Positioned(
-              //                                     left: screenWidth * 0.073,
-              //                                     top: 0,
-              //                                     child: Container(
-              //                                       width: screenWidth * 0.006,
-              //                                       height: screenHeight * 0.003,
-              //                                       decoration: ShapeDecoration(
-              //                                         color: Color(0xFFFB5D66),
-              //                                         shape: OvalBorder(),
-              //                                       ),
-              //                                     ),
-              //                                   ),
-              //                                   Positioned(
-              //                                     left: screenWidth * 0.083,
-              //                                     top: screenHeight * 0.001,
-              //                                     child: Container(
-              //                                       width: screenWidth * 0.006,
-              //                                       height: screenHeight * 0.003,
-              //                                       decoration: ShapeDecoration(
-              //                                         color: Color(0xFFFB5D66),
-              //                                         shape: OvalBorder(),
-              //                                       ),
-              //                                     ),
-              //                                   ),
-              //                                 ],
-              //                               ),
-              //                             ),
-              //                           ),
-              //                         ],
-              //                       ),
-              //                     ),
-              //                   ),
-              //                 ),
-              //                 Positioned(
-              //                   left: screenWidth * 0.029,
-              //                   top: 0,
-              //                   child: Container(
-              //                     width: screenWidth * 0.236,
-              //                     height: screenHeight * 0.108,
-              //                     child: Stack(
-              //                       children: [
-              //                         Positioned(
-              //                           left: 0,
-              //                           top: 0,
-              //                           child: Container(
-              //                             width: screenWidth * 0.236,
-              //                             height: screenHeight * 0.108,
-              //                             child: FlutterLogo(),
-              //                           ),
-              //                         ),
-              //                         Positioned(
-              //                           left: 0,
-              //                           top: 0,
-              //                           child: Container(
-              //                             width: screenWidth * 0.236,
-              //                             height: screenHeight * 0.108,
-              //                             child: FlutterLogo(),
-              //                           ),
-              //                         ),
-              //                         Positioned(
-              //                           left: 0,
-              //                           top: 0,
-              //                           child: Container(
-              //                             width: screenWidth * 0.236,
-              //                             height: screenHeight * 0.108,
-              //                             child: FlutterLogo(),
-              //                           ),
-              //                         ),
-              //                       ],
-              //                     ),
-              //                   ),
-              //                 ),
-              //                 Positioned(
-              //                   left: 0,
-              //                   top: screenHeight * 0.115,
-              //                   child: Transform(
-              //                     transform: Matrix4.identity()
-              //                       ..translate(0.0, 0.0)
-              //                       ..rotateZ(-0.44),
-              //                     child: Container(
-              //                       width: screenWidth * 0.074,
-              //                       height: screenHeight * 0.037,
-              //                       child: Stack(
-              //                         children: [
-              //                           Positioned(
-              //                             left: 0,
-              //                             top: 0,
-              //                             child: Container(
-              //                               width: screenWidth * 0.074,
-              //                               height: screenHeight * 0.037,
-              //                               child: FlutterLogo(),
-              //                             ),
-              //                           ),
-              //                           Positioned(
-              //                             left: 0,
-              //                             top: 0,
-              //                             child: Container(
-              //                               width: screenWidth * 0.074,
-              //                               height: screenHeight * 0.037,
-              //                               child: FlutterLogo(),
-              //                             ),
-              //                           ),
-              //                           Positioned(
-              //                             left: 0,
-              //                             top: 0,
-              //                             child: Container(
-              //                               width: screenWidth * 0.074,
-              //                               height: screenHeight * 0.037,
-              //                               child: FlutterLogo(),
-              //                             ),
-              //                           ),
-              //                         ],
-              //                       ),
-              //                     ),
-              //                   ),
-              //                 ),
-              //                 Positioned(
-              //                   left: screenWidth * 0.282,
-              //                   top: screenHeight * 0.114,
-              //                   child: Transform(
-              //                     transform: Matrix4.identity()
-              //                       ..translate(0.0, 0.0)
-              //                       ..rotateZ(3.12),
-              //                     child: Container(
-              //                       width: screenWidth * 0.159,
-              //                       height: screenHeight * 0.073,
-              //                       child: FlutterLogo(),
-              //                     ),
-              //                   ),
-              //                 ),
-              //               ],
-              //             ),
-              //           ),
-              //         ),
-              //         Positioned(
-              //           left: screenWidth * 0.823,
-              //           top: screenHeight * 0.010,
-              //           child: Container(
-              //             width: screenWidth * 0.295,
-              //             height: screenHeight * 0.226,
-              //             child: Stack(
-              //               children: [
-              //                 Positioned(
-              //                   left: 0,
-              //                   top: screenHeight * 0.091,
-              //                   child: Container(
-              //                     width: screenWidth * 0.295,
-              //                     height: screenHeight * 0.136,
-              //                     child: Stack(),
-              //                   ),
-              //                 ),
-              //                 Positioned(
-              //                   left: screenWidth * 0.093,
-              //                   top: screenHeight * 0.133,
-              //                   child: Container(
-              //                     width: screenWidth * 0.201,
-              //                     height: screenHeight * 0.092,
-              //                     child: FlutterLogo(),
-              //                   ),
-              //                 ),
-              //                 Positioned(
-              //                   left: screenWidth * 0.029,
-              //                   top: screenHeight * 0.165,
-              //                   child: Transform(
-              //                     transform: Matrix4.identity()
-              //                       ..translate(0.0, 0.0)
-              //                       ..rotateZ(0.29),
-              //                     child: Container(
-              //                       width: screenWidth * 0.231,
-              //                       height: screenHeight * 0.110,
-              //                       child: Stack(
-              //                         children: [
-              //                           Positioned(
-              //                             left: 0,
-              //                             top: 0,
-              //                             child: Container(
-              //                               width: screenWidth * 0.231,
-              //                               height: screenHeight * 0.110,
-              //                               child: FlutterLogo(),
-              //                             ),
-              //                           ),
-              //                           Positioned(
-              //                             left: 0,
-              //                             top: 0,
-              //                             child: Container(
-              //                               width: screenWidth * 0.231,
-              //                               height: screenHeight * 0.110,
-              //                               child: FlutterLogo(),
-              //                             ),
-              //                           ),
-              //                           Positioned(
-              //                             left: 0,
-              //                             top: 0,
-              //                             child: Container(
-              //                               width: screenWidth * 0.231,
-              //                               height: screenHeight * 0.110,
-              //                               child: FlutterLogo(),
-              //                             ),
-              //                           ),
-              //                         ],
-              //                       ),
-              //                     ),
-              //                   ),
-              //                 ),
-              //                 Positioned(
-              //                   left: screenWidth * 0.05,
-              //                   top: screenHeight * 0.098,
-              //                   child: Container(
-              //                     width: screenWidth * 0.101,
-              //                     height: screenHeight * 0.045,
-              //                     child: FlutterLogo(),
-              //                   ),
-              //                 ),
-              //                 Positioned(
-              //                   left: screenWidth * 0.174,
-              //                   top: screenHeight * 0.103,
-              //                   child: Transform(
-              //                     transform: Matrix4.identity()
-              //                       ..translate(0.0, 0.0)
-              //                       ..rotateZ(0.22),
-              //                     child: Container(
-              //                       width: screenWidth * 0.095,
-              //                       height: screenHeight * 0.045,
-              //                       child: FlutterLogo(),
-              //                     ),
-              //                   ),
-              //                 ),
-              //                 Positioned(
-              //                   left: -screenWidth * 0.192,
-              //                   top: screenHeight * 0.033,
-              //                   child: Container(
-              //                     width: screenWidth * 0.295,
-              //                     height: screenHeight * 0.226,
-              //                     child: Stack(
-              //                       children: [
-              //                         Positioned(
-              //                           left: 0,
-              //                           top: screenHeight * 0.091,
-              //                           child: Container(
-              //                             width: screenWidth * 0.295,
-              //                             height: screenHeight * 0.136,
-              //                             child: Stack(),
-              //                           ),
-              //                         ),
-              //                         Positioned(
-              //                           left: screenWidth * 0.076,
-              //                           top: screenHeight * 0.113,
-              //                           child: Container(
-              //                             width: screenWidth * 0.073,
-              //                             height: screenHeight * 0.034,
-              //                             child: FlutterLogo(),
-              //                           ),
-              //                         ),
-              //                         Positioned(
-              //                           left: screenWidth * 0.171,
-              //                           top: screenHeight * 0.101,
-              //                           child: Transform(
-              //                             transform: Matrix4.identity()
-              //                               ..translate(0.0, 0.0)
-              //                               ..rotateZ(0.22),
-              //                             child: Container(
-              //                               width: screenWidth * 0.228,
-              //                               height: screenHeight * 0.107,
-              //                               child: FlutterLogo(),
-              //                             ),
-              //                           ),
-              //                         ),
-              //                         Positioned(
-              //                           left: screenWidth * 0.157,
-              //                           top: screenHeight * 0.104,
-              //                           child: Container(
-              //                             width: screenWidth * 0.051,
-              //                             height: screenHeight * 0.024,
-              //                             child: FlutterLogo(),
-              //                           ),
-              //                         ),
-              //                         Positioned(
-              //                           left: screenWidth * 0.042,
-              //                           top: 0,
-              //                           child: Container(
-              //                             width: screenWidth * 0.236,
-              //                             height: screenHeight * 0.108,
-              //                             child: Stack(
-              //                               children: [
-              //                                 Positioned(
-              //                                   left: 0,
-              //                                   top: 0,
-              //                                   child: Container(
-              //                                     width: screenWidth * 0.236,
-              //                                     height: screenHeight * 0.108,
-              //                                     child: FlutterLogo(),
-              //                                   ),
-              //                                 ),
-              //                                 Positioned(
-              //                                   left: 0,
-              //                                   top: 0,
-              //                                   child: Container(
-              //                                     width: screenWidth * 0.236,
-              //                                     height: screenHeight * 0.108,
-              //                                     child: FlutterLogo(),
-              //                                   ),
-              //                                 ),
-              //                                 Positioned(
-              //                                   left: 0,
-              //                                   top: 0,
-              //                                   child: Container(
-              //                                     width: screenWidth * 0.236,
-              //                                     height: screenHeight * 0.108,
-              //                                     child: FlutterLogo(),
-              //                                   ),
-              //                                 ),
-              //                               ],
-              //                             ),
-              //                           ),
-              //                         ),
-              //                       ],
-              //                     ),
-              //                   ),
-              //                 ),
-              //                 Positioned(
-              //                   left: -screenWidth * 0.216,
-              //                   top: screenHeight * 0.024,
-              //                   child: Container(
-              //                     width: screenWidth * 0.423,
-              //                     height: screenHeight * 0.079,
-              //                     child: Stack(
-              //                       children: [
-              //                         Positioned(
-              //                           left: 0,
-              //                           top: 0,
-              //                           child: Container(
-              //                             width: screenWidth * 0.423,
-              //                             height: screenHeight * 0.079,
-              //                             decoration: ShapeDecoration(
-              //                               color: Color(0xFF9B9B9B),
-              //                               shape: RoundedRectangleBorder(
-              //                                 borderRadius:
-              //                                     BorderRadius.circular(10),
-              //                               ),
-              //                             ),
-              //                           ),
-              //                         ),
-              //                       ],
-              //                     ),
-              //                   ),
-              //                 ),
-              //               ],
-              //             ),
-              //           ),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // ),
 
               // 산책 이동 버튼
               Positioned(
@@ -812,6 +222,7 @@ class SelectPage extends StatelessWidget {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
+
                             ),
                           ),
                         ),
@@ -876,7 +287,7 @@ class SelectPage extends StatelessWidget {
               // 챗봇 이동 버튼
               Positioned(
                 left: screenWidth * 0.069,
-                top: screenHeight * 0.138,
+                top: screenHeight * 0.098,
                 child: GestureDetector(
                   onTap: () {
                     // 네비게이션 동작
@@ -965,7 +376,7 @@ class SelectPage extends StatelessWidget {
               // 체크리스트 버튼
               Positioned(
                 left: screenWidth * 0.54,
-                top: screenHeight * 0.138,
+                top: screenHeight * 0.098,
                 child: GestureDetector(
                   onTap: () {
                     // 네비게이션 동작
@@ -1059,7 +470,7 @@ class SelectPage extends StatelessWidget {
               // 알람
               Positioned(
                 left: screenWidth * 0.54,
-                top: screenHeight * 0.492,
+                top: screenHeight * 0.442,
                 child: Container(
                   width: screenWidth * 0.423,
                   height: screenHeight * 0.316,
@@ -1069,78 +480,25 @@ class SelectPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: screenWidth * 0.03), // 좌우 여백 추가
+                    child: Center(
+                      // 텍스트를 중앙에 배치
+                      child: Text(
+                        '오늘 아침에 \n멀미약을 복용하셨나요?', // 여기에 넣을 텍스트 작성
+                        style: TextStyle(
+                          color: Colors.black, // 텍스트 색상
+                          fontSize: screenWidth * 0.05, // 상대적인 글꼴 크기
+                          fontWeight: FontWeight.bold, // 굵은 글꼴
+                        ),
+                        textAlign: TextAlign.center, // 텍스트 가운데 정렬
+                      ),
+                    ),
+                  ),
                 ),
               ),
               // 알람
-
-              // Positioned(
-              //   left: screenWidth * 0.545,
-              //   top: screenHeight * 0.138,
-              //   child: Container(
-              //     width: screenWidth * 0.415,
-              //     height: screenHeight * 0.212,
-              //     clipBehavior: Clip.antiAlias,
-              //     decoration: BoxDecoration(),
-              //     child: Stack(),
-              //   ),
-              // ),
-              // Positioned(
-              //   left: screenWidth * 0.069,
-              //   top: screenHeight * 0.524,
-              //   child: Container(
-              //     width: screenWidth * 0.419,
-              //     height: screenHeight * 0.186,
-              //     clipBehavior: Clip.antiAlias,
-              //     decoration: BoxDecoration(),
-              //     child: Stack(),
-              //   ),
-              // ),
-              // Positioned(
-              //   left: screenWidth * 0.054,
-              //   top: screenHeight * 0.165,
-              //   child: Container(
-              //     width: screenWidth * 0.417,
-              //     height: screenHeight * 0.200,
-              //     child: Row(
-              //       mainAxisSize: MainAxisSize.min,
-              //       mainAxisAlignment: MainAxisAlignment.start,
-              //       crossAxisAlignment: CrossAxisAlignment.center,
-              //       children: [
-              //         Container(
-              //           width: screenWidth * 0.458,
-              //           height: screenHeight * 0.138,
-              //           clipBehavior: Clip.antiAlias,
-              //           decoration: BoxDecoration(),
-              //           child: Stack(
-              //             children: [
-              //               Positioned(
-              //                 left: 0,
-              //                 top: 0,
-              //                 child: Container(
-              //                   width: screenWidth * 0.458,
-              //                   height: screenHeight * 0.138,
-              //                   child: Stack(
-              //                     children: [
-              //                       Positioned(
-              //                         left: 0,
-              //                         top: 0,
-              //                         child: Container(
-              //                           width: screenWidth * 0.458,
-              //                           height: screenHeight * 0.138,
-              //                           child: Stack(),
-              //                         ),
-              //                       ),
-              //                     ],
-              //                   ),
-              //                 ),
-              //               ),
-              //             ],
-              //           ),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         ),

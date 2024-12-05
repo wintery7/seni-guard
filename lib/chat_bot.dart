@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:seniguard/select_page.dart';
 import 'package:seniguard/seni_modal.dart';
 
 void main() {
@@ -99,12 +100,17 @@ class _ChatBotPageState extends State<ChatBotPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back), // 뒤로가기 아이콘
+          icon: const Icon(Icons.arrow_back, color: Colors.white,), // 뒤로가기 아이콘
           onPressed: () {
-            Navigator.pop(context); // 뒤로가기 동작
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const FigmaToCode_2(), // 원하는 화면으로 변경
+              ),
+            );
           },
         ),
-        title: const Text('시니'),
+        title: const Text('시니', style: TextStyle(color: Colors.white),),
         centerTitle: true, // 텍스트 중앙 정렬
         backgroundColor: const Color(0xFF53B175),
       ),
