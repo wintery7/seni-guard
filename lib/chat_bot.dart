@@ -36,18 +36,25 @@ class _ChatBotPageState extends State<ChatBotPage> {
   // 챗봇에 텍스트 요청 보내는 함수
   Future<void> _sendTextToChatBot(String text) async {
     setState(() {
-      // 사용자 메시지 추가
       _messages.add({'sender': 'user', 'message': text});
     });
 
-    final url =
-        Uri.parse('https://chatbot-iya6loaa4q-du.a.run.app'); // 챗봇 서버 URL
+    final url = Uri.parse('https://chatbot-iya6loaa4q-du.a.run.app');
+    
     try {
       final response = await http.post(
         url,
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({'message': text}),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'message': text
+        }),
       );
+
+      print('Request body: ${json.encode({'message': text})}');  // 요청 바디 출력
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -58,17 +65,24 @@ class _ChatBotPageState extends State<ChatBotPage> {
           });
         });
       } else {
+        print('Error response: ${response.body}');
         setState(() {
-          _messages.add({'sender': 'bot', 'message': '메시지를 다시 보내주세요!'});
+          _messages.add({
+            'sender': 'bot', 
+            'message': '오류가 발생했습니다. (${response.statusCode})'
+          });
         });
       }
     } catch (e) {
+      print('Error: $e');
       setState(() {
-        _messages.add({'sender': 'bot', 'message': '서버에 연결할 수 없습니다.'});
+        _messages.add({
+          'sender': 'bot', 
+          'message': '네트워크 오류가 발생했습니다.'
+        });
       });
     }
 
-    // 스크롤을 최신 메시지로 이동
     Future.delayed(Duration(milliseconds: 300), () {
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     });
@@ -188,7 +202,7 @@ class _ChatBotPageState extends State<ChatBotPage> {
                     child: TextField(
                       controller: _textController,
                       style: const TextStyle(
-                        color: Colors.white, // 입력 텍스트 색상
+                        color: Colors.white, // 입력 텍스�� 색상
                         fontSize: 18,
                         fontFamily: 'Freesentation', // 원하는 폰트 설정
                         fontWeight: FontWeight.w500,
